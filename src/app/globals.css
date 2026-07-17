@@ -1,0 +1,66 @@
+@import "tailwindcss";
+
+:root {
+  --background: #f8faf9;
+  --foreground: #10231c;
+  --muted: #5f6f68;
+  --surface: #ffffff;
+  --subtle: #edf3f0;
+  --border: #dce7e1;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-surface: var(--surface);
+  --color-subtle: var(--subtle);
+  --color-border: var(--border);
+  --font-sans: var(--font-geist-sans);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #08110e;
+    --foreground: #ecf4f0;
+    --muted: #9caaa4;
+    --surface: #0e1a16;
+    --subtle: #172620;
+    --border: #263a32;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+}
+
+.button {
+  display: inline-flex;
+  min-height: 3rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.75rem;
+  padding: 0.75rem 1.25rem;
+  font-weight: 650;
+  transition: 150ms ease;
+}
+
+.button-primary {
+  background: #059669;
+  color: #ffffff;
+}
+
+.button-primary:hover {
+  background: #047857;
+}
+
+.button-secondary {
+  border: 1px solid var(--border);
+  background: var(--surface);
+}
+
+.button-secondary:hover {
+  background: var(--subtle);
+}

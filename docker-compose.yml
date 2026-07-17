@@ -1,0 +1,46 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: futsal-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: futsal
+      POSTGRES_PASSWORD: futsal
+      POSTGRES_DB: futsal
+    ports:
+      - "5432:5432"
+    volumes:
+      - futsal_pg_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U futsal -d futsal"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: futsal-app
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env.local
+    environment:
+      # Inside Docker Compose, the app reaches Postgres via the service name.
+      DATABASE_URL: postgresql://futsal:futsal@db:5432/futsal
+      APP_URL: http://localhost:3000
+    volumes:
+      # Hot reload: source stays on your machine, node_modules stays in the image.
+      - .:/app
+      - futsal_node_modules:/app/node_modules
+      - futsal_next:/app/.next
+
+volumes:
+  futsal_pg_data:
+  futsal_node_modules:
+  futsal_next:
