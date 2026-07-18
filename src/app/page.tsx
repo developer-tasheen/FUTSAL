@@ -54,10 +54,14 @@ export default async function Home() {
   const openStart = Math.min(...pricingRules.map((rule) => rule.startHour));
   const openEnd = Math.max(...pricingRules.map((rule) => rule.endHour));
 
+  // Short hour labels ("12 PM") keep the stats strip on one line.
+  const shortHour = (hour: number) =>
+    formatHourDisplay(hour).replace(":00", "");
+
   const stats = [
-    { value: "7 days", label: "Open every week" },
+    { value: "7 Days", label: "Open every week" },
     {
-      value: `${formatHourDisplay(openStart)} – ${formatHourDisplay(openEnd)}`,
+      value: `${shortHour(openStart)} – ${shortHour(openEnd)}`,
       label: "Daily playing hours",
     },
     { value: `FJD $${minPrice}`, label: "Sessions from" },
@@ -152,13 +156,20 @@ export default async function Home() {
           className="animate-fade-up relative border-t border-white/15 bg-black/50 backdrop-blur-sm"
           style={{ animationDelay: "0.75s" }}
         >
-          <div className="mx-auto grid w-full max-w-6xl grid-cols-2 gap-6 px-4 py-8 sm:px-6 lg:grid-cols-4 lg:px-8">
-            {stats.map((stat) => (
-              <div key={stat.label}>
-                <p className="text-xl font-bold text-accent sm:text-2xl">
+          <div className="mx-auto grid w-full max-w-6xl grid-cols-2 lg:grid-cols-4">
+            {stats.map((stat, index) => (
+              <div
+                className={`flex flex-col items-center justify-center px-4 py-6 text-center sm:py-7 ${
+                  index % 2 === 1 ? "border-l border-white/10" : ""
+                } ${index >= 2 ? "border-t border-white/10 lg:border-t-0" : ""} ${
+                  index === 2 ? "lg:border-l" : ""
+                }`}
+                key={stat.label}
+              >
+                <p className="whitespace-nowrap text-lg font-bold text-accent sm:text-2xl">
                   {stat.value}
                 </p>
-                <p className="mt-1 text-xs uppercase tracking-wide text-white/70 sm:text-sm">
+                <p className="mt-1 whitespace-nowrap text-[11px] uppercase tracking-wider text-white/70 sm:text-xs">
                   {stat.label}
                 </p>
               </div>
@@ -183,7 +194,7 @@ export default async function Home() {
           {steps.map((step, index) => (
             <Reveal delay={index * 0.15} key={step.title}>
               <div className="group relative h-full rounded-2xl border border-border bg-surface p-8 transition duration-300 hover:-translate-y-1.5 hover:border-accent hover:shadow-xl hover:shadow-accent/10">
-                <span className="absolute right-6 top-6 text-5xl font-extrabold text-subtle transition group-hover:text-accent/10">
+                <span className="absolute right-6 top-6 inline-flex h-10 w-10 items-center justify-center rounded-full border-2 border-accent/40 text-lg font-extrabold text-accent transition duration-300 group-hover:border-accent group-hover:bg-accent group-hover:text-white">
                   {index + 1}
                 </span>
                 <span className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-accent/10 text-accent transition duration-300 group-hover:scale-110 group-hover:bg-accent group-hover:text-white">
