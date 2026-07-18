@@ -203,14 +203,14 @@ export function BookingForm() {
 
   return (
     <div className="grid gap-8 lg:grid-cols-[1fr_360px]">
-      <div className="space-y-10">
-        <section>
+      <div className="space-y-5">
+        <section className="rounded-2xl border border-border bg-surface p-5 sm:p-6">
           <StepHeading
             hint="Bookings open up to 7 days in advance."
             step={1}
             title="Pick a day"
           />
-          <div className="mt-4 grid grid-cols-4 gap-2 sm:grid-cols-7 sm:gap-3">
+          <div className="mt-5 grid grid-cols-4 gap-2 sm:grid-cols-7 sm:gap-3">
             {bookingDays.map((day) => {
               const isSelected = date === day.iso;
               return (
@@ -218,7 +218,7 @@ export function BookingForm() {
                   className={`rounded-xl border px-2 py-3 text-center transition ${
                     isSelected
                       ? "border-accent bg-accent text-white shadow-lg shadow-accent/25"
-                      : "border-border bg-surface hover:border-accent"
+                      : "border-border bg-background hover:border-accent"
                   }`}
                   key={day.iso}
                   onClick={() => setDate(day.iso)}
@@ -240,9 +240,9 @@ export function BookingForm() {
           </div>
         </section>
 
-        <section>
+        <section className="rounded-2xl border border-border bg-surface p-5 sm:p-6">
           <StepHeading step={2} title="Pick a court" />
-          <div className="mt-4 flex flex-wrap gap-3">
+          <div className="mt-5 flex flex-wrap gap-3">
             {courts.map((court) => (
               <button
                 className={`button ${
@@ -261,16 +261,16 @@ export function BookingForm() {
           </div>
         </section>
 
-        <section>
+        <section className="rounded-2xl border border-border bg-surface p-5 sm:p-6">
           <StepHeading
             hint="Prices are per one-hour slot. Booked or past slots are greyed out."
             step={3}
             title="Pick a time"
           />
           {loadingSlots ? (
-            <p className="mt-4 text-sm text-muted">Loading available slots…</p>
+            <p className="mt-5 text-sm text-muted">Loading available slots…</p>
           ) : (
-            <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">
+            <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3">
               {slots.map((slot) => {
                 const passed = slotHasPassed(slot);
                 const available = slot.isAvailable && !passed;
@@ -282,7 +282,7 @@ export function BookingForm() {
                         ? "cursor-not-allowed border-border bg-subtle opacity-50"
                         : isSelected
                           ? "border-accent bg-accent text-white shadow-lg shadow-accent/25"
-                          : "border-border bg-surface hover:border-accent"
+                          : "border-border bg-background hover:border-accent"
                     }`}
                     disabled={!available}
                     key={slot.startTime}
@@ -315,10 +315,10 @@ export function BookingForm() {
           )}
         </section>
 
-        <section>
+        <section className="rounded-2xl border border-border bg-surface p-5 sm:p-6">
           <StepHeading step={4} title="Your details" />
           {account && !useOtherDetails ? (
-            <div className="mt-4 flex flex-col gap-4 rounded-2xl border border-accent/30 bg-accent/5 p-5 sm:flex-row sm:items-center sm:justify-between">
+            <div className="mt-5 flex flex-col gap-4 rounded-2xl border border-accent/30 bg-accent/5 p-5 sm:flex-row sm:items-center sm:justify-between">
               <div className="flex items-center gap-4">
                 <span className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-accent/15 text-accent">
                   <UserRound size={22} />

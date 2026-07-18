@@ -1,8 +1,10 @@
 "use client";
 
+import { UserRound } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
+import { PasswordInput } from "@/components/ui/password-input";
 
 export function LoginForm() {
   const router = useRouter();
@@ -46,37 +48,37 @@ export function LoginForm() {
   }
 
   return (
-    <form
-      className="mt-8 space-y-4 rounded-2xl border border-border bg-surface p-6 sm:p-8"
-      onSubmit={onSubmit}
-    >
+    <form className="mt-8 space-y-5" onSubmit={onSubmit}>
       <div>
         <label className="label" htmlFor="identifier">
           Mobile number or email
         </label>
-        <input
-          autoComplete="username"
-          className="input"
-          id="identifier"
-          name="identifier"
-          placeholder="e.g. 9XX XXXX"
-          required
-          type="text"
-        />
+        <div className="relative">
+          <UserRound
+            className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-muted"
+            size={18}
+          />
+          <input
+            autoComplete="username"
+            className="input input-icon-left"
+            id="identifier"
+            name="identifier"
+            placeholder="e.g. 9XX XXXX"
+            required
+            type="text"
+          />
+        </div>
       </div>
 
       <div>
         <label className="label" htmlFor="password">
           Password
         </label>
-        <input
+        <PasswordInput
           autoComplete="current-password"
-          className="input"
           id="password"
           name="password"
           placeholder="Your password"
-          required
-          type="password"
         />
       </div>
 
@@ -87,20 +89,29 @@ export function LoginForm() {
       ) : null}
 
       <button
-        className="button button-primary w-full disabled:opacity-60"
+        className="button button-primary w-full shadow-lg shadow-accent/20 disabled:opacity-60"
         disabled={loading}
         type="submit"
       >
         {loading ? "Logging in…" : "Log in"}
       </button>
 
+      <div className="flex items-center gap-3">
+        <span className="h-px flex-1 bg-border" />
+        <span className="text-xs font-medium uppercase tracking-wide text-muted">
+          New here?
+        </span>
+        <span className="h-px flex-1 bg-border" />
+      </div>
+
+      <Link className="button button-secondary w-full" href="/register">
+        Create an account
+      </Link>
+
       <p className="text-center text-sm text-muted">
-        Don&apos;t have an account?{" "}
-        <Link
-          className="font-semibold text-accent hover:underline"
-          href="/register"
-        >
-          Register
+        Just want to book quickly?{" "}
+        <Link className="font-semibold text-accent hover:underline" href="/book">
+          Book as guest
         </Link>
       </p>
     </form>

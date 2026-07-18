@@ -94,6 +94,15 @@ body {
   outline-offset: 1px;
 }
 
+/* Room for icons inside inputs (.input's own padding wins over utilities) */
+.input-icon-left {
+  padding-left: 2.875rem;
+}
+
+.input-icon-right {
+  padding-right: 3rem;
+}
+
 /* Hero entrance animations */
 @keyframes hero-zoom {
   from {

@@ -1,8 +1,10 @@
 "use client";
 
+import { Mail, Smartphone, UserRound } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
+import { PasswordInput } from "@/components/ui/password-input";
 
 export function RegisterForm() {
   const router = useRouter();
@@ -54,84 +56,95 @@ export function RegisterForm() {
   }
 
   return (
-    <form
-      className="mt-8 space-y-4 rounded-2xl border border-border bg-surface p-6 sm:p-8"
-      onSubmit={onSubmit}
-    >
+    <form className="mt-8 space-y-5" onSubmit={onSubmit}>
       <div>
         <label className="label" htmlFor="fullName">
           Full name
         </label>
-        <input
-          autoComplete="name"
-          className="input"
-          id="fullName"
-          name="fullName"
-          placeholder="Your full name"
-          required
-          type="text"
-        />
+        <div className="relative">
+          <UserRound
+            className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-muted"
+            size={18}
+          />
+          <input
+            autoComplete="name"
+            className="input input-icon-left"
+            id="fullName"
+            name="fullName"
+            placeholder="Your full name"
+            required
+            type="text"
+          />
+        </div>
       </div>
 
-      <div>
-        <label className="label" htmlFor="mobile">
-          Mobile number
-        </label>
-        <input
-          autoComplete="tel"
-          className="input"
-          id="mobile"
-          inputMode="tel"
-          name="mobile"
-          placeholder="e.g. 9XX XXXX"
-          required
-          type="tel"
-        />
+      <div className="grid gap-5 sm:grid-cols-2">
+        <div>
+          <label className="label" htmlFor="mobile">
+            Mobile number
+          </label>
+          <div className="relative">
+            <Smartphone
+              className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-muted"
+              size={18}
+            />
+            <input
+              autoComplete="tel"
+              className="input input-icon-left"
+              id="mobile"
+              inputMode="tel"
+              name="mobile"
+              placeholder="e.g. 9XX XXXX"
+              required
+              type="tel"
+            />
+          </div>
+        </div>
+        <div>
+          <label className="label" htmlFor="email">
+            Email <span className="font-normal text-muted">(optional)</span>
+          </label>
+          <div className="relative">
+            <Mail
+              className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-muted"
+              size={18}
+            />
+            <input
+              autoComplete="email"
+              className="input input-icon-left"
+              id="email"
+              inputMode="email"
+              name="email"
+              placeholder="you@example.com"
+              type="email"
+            />
+          </div>
+        </div>
       </div>
 
-      <div>
-        <label className="label" htmlFor="email">
-          Email <span className="font-normal text-muted">(optional)</span>
-        </label>
-        <input
-          autoComplete="email"
-          className="input"
-          id="email"
-          inputMode="email"
-          name="email"
-          placeholder="you@example.com"
-          type="email"
-        />
-      </div>
-
-      <div>
-        <label className="label" htmlFor="password">
-          Password
-        </label>
-        <input
-          autoComplete="new-password"
-          className="input"
-          id="password"
-          name="password"
-          placeholder="Choose a strong password"
-          required
-          type="password"
-        />
-      </div>
-
-      <div>
-        <label className="label" htmlFor="confirmPassword">
-          Confirm password
-        </label>
-        <input
-          autoComplete="new-password"
-          className="input"
-          id="confirmPassword"
-          name="confirmPassword"
-          placeholder="Repeat your password"
-          required
-          type="password"
-        />
+      <div className="grid gap-5 sm:grid-cols-2">
+        <div>
+          <label className="label" htmlFor="password">
+            Password
+          </label>
+          <PasswordInput
+            autoComplete="new-password"
+            id="password"
+            name="password"
+            placeholder="At least 6 characters"
+          />
+        </div>
+        <div>
+          <label className="label" htmlFor="confirmPassword">
+            Confirm password
+          </label>
+          <PasswordInput
+            autoComplete="new-password"
+            id="confirmPassword"
+            name="confirmPassword"
+            placeholder="Repeat your password"
+          />
+        </div>
       </div>
 
       {error ? (
@@ -141,7 +154,7 @@ export function RegisterForm() {
       ) : null}
 
       <button
-        className="button button-primary w-full disabled:opacity-60"
+        className="button button-primary w-full shadow-lg shadow-accent/20 disabled:opacity-60"
         disabled={loading}
         type="submit"
       >
