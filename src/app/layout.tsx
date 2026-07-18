@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Geist } from "next/font/google";
+import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
+import { ThemeProvider } from "@/components/theme/theme-provider";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -10,10 +12,11 @@ const geistSans = Geist({
 
 export const metadata: Metadata = {
   title: {
-    default: "Futsal Platform",
-    template: "%s | Futsal Platform",
+    default: "Naikabula Futsal Court",
+    template: "%s | Naikabula Futsal Court",
   },
-  description: "Book and manage futsal courts online.",
+  description:
+    "Book a futsal court online at Naikabula Futsal Court. Check availability, view pricing, and pay securely with M-PAiSA.",
 };
 
 export default function RootLayout({
@@ -22,10 +25,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${geistSans.variable} h-full antialiased`}>
+    <html
+      lang="en"
+      className={`${geistSans.variable} h-full antialiased`}
+      suppressHydrationWarning
+    >
       <body className="flex min-h-full flex-col">
-        <SiteHeader />
-        {children}
+        <ThemeProvider>
+          <SiteHeader />
+          {children}
+          <SiteFooter />
+        </ThemeProvider>
       </body>
     </html>
   );

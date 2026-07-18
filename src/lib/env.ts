@@ -1,14 +1,15 @@
 import { z } from "zod";
 
 const serverEnvironmentSchema = z.object({
-  DATABASE_URL: z.url(),
-  MPAISA_BASE_URL: z.url(),
-  MPAISA_CLIENT_ID: z.string().min(1),
-  MPAISA_CLIENT_SECRET: z.string().min(1),
-  MPAISA_MERCHANT_TID: z.string().min(1),
-  MPAISA_MERCHANT_SECRET: z.string().min(1),
+  DATABASE_URL: z.string().min(1),
+  AUTH_SECRET: z.string().min(16),
+  APP_URL: z.string().url().optional(),
 });
 
 export function getServerEnvironment() {
-  return serverEnvironmentSchema.parse(process.env);
+  return serverEnvironmentSchema.parse({
+    DATABASE_URL: process.env.DATABASE_URL,
+    AUTH_SECRET: process.env.AUTH_SECRET,
+    APP_URL: process.env.APP_URL,
+  });
 }
