@@ -5,9 +5,15 @@ import postgres from "postgres";
 import * as schema from "../src/lib/db/schema";
 
 async function main() {
-  const databaseUrl =
-    process.env.DATABASE_URL?.replace("@db:", "@localhost:") ??
+  const { existsSync } = await import("node:fs");
+  const rawUrl =
+    process.env.DATABASE_URL ??
     "postgresql://futsal:futsal@localhost:5432/futsal";
+  // Compose uses hostname `db`; rewrite to localhost when seeding from the host machine.
+  const databaseUrl =
+    existsSync("/.dockerenv") || process.env.SEED_DATABASE_URL
+      ? (process.env.SEED_DATABASE_URL ?? rawUrl)
+      : rawUrl.replace("@db:", "@localhost:");
 
   const client = postgres(databaseUrl, { prepare: false });
   const db = drizzle(client, { schema });
@@ -49,17 +55,24 @@ async function main() {
     where: eq(schema.users.mobileNumber, adminMobile),
   });
 
+  const adminPassword = "Naikabula1234567890";
+  const adminPasswordHash = await hash(adminPassword, 10);
+
   if (!existingAdmin) {
     await db.insert(schema.users).values({
       name: "Naikabula Admin",
       mobileNumber: adminMobile,
       email: "admin@naikabulafutsal.com",
-      passwordHash: await hash("admin123", 10),
+      passwordHash: adminPasswordHash,
       role: "ADMIN",
     });
-    console.log("Seeded admin user (mobile 9000000 / password admin123)");
+    console.log("Seeded admin user (mobile 9000000)");
   } else {
-    console.log("Admin user already exists");
+    await db
+      .update(schema.users)
+      .set({ passwordHash: adminPasswordHash })
+      .where(eq(schema.users.mobileNumber, adminMobile));
+    console.log("Updated admin password");
   }
 
   await client.end();

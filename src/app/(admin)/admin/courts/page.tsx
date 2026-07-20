@@ -1,7 +1,17 @@
 "use client";
 
+import { Warehouse } from "lucide-react";
 import { FormEvent, useEffect, useState } from "react";
-import { ErrorNote, PageTitle, SuccessNote } from "../ui";
+import {
+  ActionMenu,
+  CountBadge,
+  ErrorNote,
+  Pagination,
+  PageHeader,
+  SectionCard,
+  SuccessNote,
+  usePagination,
+} from "../ui";
 
 type Court = {
   id: string;
@@ -18,6 +28,7 @@ export default function AdminCourtsPage() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(true);
+  const { page, pageItems, setPage, totalPages } = usePagination(courts);
 
   useEffect(() => {
     async function load() {
@@ -120,113 +131,126 @@ export default function AdminCourtsPage() {
   }
 
   return (
-    <div>
-      <PageTitle
+    <>
+      <PageHeader
         description="Add, rename, activate, or remove courts. Inactive courts cannot be booked."
+        icon={Warehouse}
         title="Courts"
       />
       <ErrorNote message={error} />
       <SuccessNote message={success} />
 
-      <form
-        className="mt-6 flex flex-col gap-3 rounded-2xl border border-border bg-surface p-5 sm:flex-row sm:items-end"
-        onSubmit={(event) => void createCourt(event)}
+      <SectionCard
+        description="New courts appear on the booking page once active."
+        title="Add a court"
       >
-        <div className="flex-1">
-          <label className="label" htmlFor="courtName">
-            Court name
-          </label>
-          <input
-            className="input"
-            id="courtName"
-            onChange={(event) => setName(event.target.value)}
-            placeholder="e.g. Court 2"
-            required
-            type="text"
-            value={name}
-          />
-        </div>
-        <div className="flex-1">
-          <label className="label" htmlFor="courtNotes">
-            Notes <span className="font-normal text-muted">(optional)</span>
-          </label>
-          <input
-            className="input"
-            id="courtNotes"
-            onChange={(event) => setNotes(event.target.value)}
-            placeholder="e.g. Outdoor court"
-            type="text"
-            value={notes}
-          />
-        </div>
-        <button className="button button-primary" type="submit">
-          Add court
-        </button>
-      </form>
+        <form
+          className="flex flex-col gap-3 sm:flex-row sm:items-end"
+          onSubmit={(event) => void createCourt(event)}
+        >
+          <div className="flex-1">
+            <label className="label" htmlFor="courtName">
+              Court name
+            </label>
+            <input
+              className="input"
+              id="courtName"
+              onChange={(event) => setName(event.target.value)}
+              placeholder="e.g. Court 2"
+              required
+              type="text"
+              value={name}
+            />
+          </div>
+          <div className="flex-1">
+            <label className="label" htmlFor="courtNotes">
+              Notes <span className="font-normal text-muted">(optional)</span>
+            </label>
+            <input
+              className="input"
+              id="courtNotes"
+              onChange={(event) => setNotes(event.target.value)}
+              placeholder="e.g. Outdoor court"
+              type="text"
+              value={notes}
+            />
+          </div>
+          <button className="button button-primary" type="submit">
+            Add court
+          </button>
+        </form>
+      </SectionCard>
 
-      <div className="mt-6 overflow-x-auto rounded-2xl border border-border">
-        <table className="w-full min-w-[560px] text-left text-sm">
-          <thead className="bg-subtle text-muted">
-            <tr>
-              <th className="px-4 py-3 font-semibold">Name</th>
-              <th className="px-4 py-3 font-semibold">Notes</th>
-              <th className="px-4 py-3 font-semibold">Status</th>
-              <th className="px-4 py-3 font-semibold">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {courts.map((court) => (
-              <tr className="border-t border-border" key={court.id}>
-                <td className="px-4 py-3 font-medium">{court.name}</td>
-                <td className="px-4 py-3 text-muted">{court.notes ?? "—"}</td>
-                <td className="px-4 py-3">
-                  <span
-                    className={`inline-block rounded-full px-3 py-1 text-xs font-semibold ${
-                      court.isActive
-                        ? "bg-accent/10 text-accent"
-                        : "bg-subtle text-muted"
-                    }`}
-                  >
-                    {court.isActive ? "Active" : "Inactive"}
-                  </span>
-                </td>
-                <td className="px-4 py-3">
-                  <div className="flex gap-3">
-                    <button
-                      className="font-medium text-accent hover:underline"
-                      onClick={() => void toggleActive(court)}
-                      type="button"
-                    >
-                      {court.isActive ? "Deactivate" : "Activate"}
-                    </button>
-                    <button
-                      className="font-medium hover:underline"
-                      onClick={() => void renameCourt(court)}
-                      type="button"
-                    >
-                      Rename
-                    </button>
-                    <button
-                      className="font-medium text-red-500 hover:underline"
-                      onClick={() => void deleteCourt(court)}
-                      type="button"
-                    >
-                      Delete
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            ))}
-            {!loading && courts.length === 0 ? (
+      <SectionCard
+        actions={<CountBadge count={courts.length} label="courts" />}
+        flush
+        title="Your courts"
+      >
+        <div className="overflow-x-auto">
+          <table className="w-full min-w-[560px] text-left text-sm">
+            <thead className="bg-subtle/40 text-muted">
               <tr>
-                <td className="px-4 py-6 text-muted" colSpan={4}>
-                  No courts yet. Add your first court above.
-                </td>
+                <th className="px-5 py-3 font-semibold">Name</th>
+                <th className="px-5 py-3 font-semibold">Notes</th>
+                <th className="px-5 py-3 font-semibold">Status</th>
+                <th className="px-5 py-3 font-semibold">Actions</th>
               </tr>
-            ) : null}
-          </tbody>
-        </table>
-      </div>
-    </div>
+            </thead>
+            <tbody>
+              {pageItems.map((court) => (
+                <tr className="border-t border-border" key={court.id}>
+                  <td className="px-5 py-3 font-medium">{court.name}</td>
+                  <td className="px-5 py-3 text-muted">{court.notes ?? "—"}</td>
+                  <td className="px-5 py-3">
+                    <span
+                      className={`inline-block rounded-full px-3 py-1 text-xs font-semibold ${
+                        court.isActive
+                          ? "bg-accent/10 text-accent"
+                          : "bg-subtle text-muted"
+                      }`}
+                    >
+                      {court.isActive ? "Active" : "Inactive"}
+                    </span>
+                  </td>
+                  <td className="px-5 py-3">
+                    <ActionMenu
+                      items={[
+                        {
+                          label: court.isActive ? "Deactivate" : "Activate",
+                          tone: "accent",
+                          onSelect: () => void toggleActive(court),
+                        },
+                        {
+                          label: "Rename",
+                          onSelect: () => void renameCourt(court),
+                        },
+                        {
+                          label: "Delete",
+                          tone: "danger",
+                          onSelect: () => void deleteCourt(court),
+                        },
+                      ]}
+                    />
+                  </td>
+                </tr>
+              ))}
+              {!loading && courts.length === 0 ? (
+                <tr>
+                  <td className="px-5 py-8 text-center text-muted" colSpan={4}>
+                    No courts yet. Add your first court above.
+                  </td>
+                </tr>
+              ) : null}
+            </tbody>
+          </table>
+        </div>
+        <Pagination
+          onPageChange={setPage}
+          page={page}
+          totalItems={courts.length}
+          totalPages={totalPages}
+        />
+      </SectionCard>
+    </>
   );
 }

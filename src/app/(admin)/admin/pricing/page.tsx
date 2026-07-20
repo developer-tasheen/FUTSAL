@@ -1,7 +1,13 @@
 "use client";
 
+import { Tag } from "lucide-react";
 import { FormEvent, useEffect, useState } from "react";
-import { ErrorNote, PageTitle, SuccessNote } from "../ui";
+import {
+  ErrorNote,
+  PageHeader,
+  SectionCard,
+  SuccessNote,
+} from "../ui";
 
 type PricingRule = {
   code: string;
@@ -81,19 +87,37 @@ export default function AdminPricingPage() {
   }
 
   return (
-    <div>
-      <PageTitle
+    <>
+      <PageHeader
+        actions={
+          rules.length ? (
+            <button
+              className="button button-primary disabled:opacity-60"
+              disabled={saving}
+              form="pricing-form"
+              type="submit"
+            >
+              {saving ? "Saving…" : "Save pricing"}
+            </button>
+          ) : null
+        }
         description="Set session times and hourly prices. Changes apply instantly to the homepage and booking calendar."
+        icon={Tag}
         title="Pricing"
       />
       <ErrorNote message={error} />
       <SuccessNote message={success} />
 
-      <form className="mt-6 space-y-4" onSubmit={(event) => void save(event)}>
+      <form
+        className="space-y-4"
+        id="pricing-form"
+        onSubmit={(event) => void save(event)}
+      >
         {rules.map((rule) => (
-          <div
-            className="rounded-2xl border border-border bg-surface p-6"
+          <SectionCard
+            description={`Code: ${rule.code}`}
             key={rule.code}
+            title={rule.label || "Session"}
           >
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
               <div>
@@ -173,28 +197,20 @@ export default function AdminPricingPage() {
                 />
               </div>
             </div>
-            <p className="mt-4 text-sm text-muted">
-              Customers see: <strong>{rule.label}</strong> ·{" "}
-              {formatHour(rule.startHour)} – {formatHour(rule.endHour)} ·{" "}
+            <p className="mt-4 rounded-xl bg-accent/5 px-4 py-3 text-sm text-muted">
+              Customers see: <strong className="text-foreground">{rule.label}</strong>{" "}
+              · {formatHour(rule.startHour)} – {formatHour(rule.endHour)} ·{" "}
               <strong className="text-accent">
                 FJD ${rule.priceFjd || 0}/hour
               </strong>
             </p>
-          </div>
+          </SectionCard>
         ))}
 
-        {rules.length ? (
-          <button
-            className="button button-primary disabled:opacity-60"
-            disabled={saving}
-            type="submit"
-          >
-            {saving ? "Saving…" : "Save pricing"}
-          </button>
-        ) : (
+        {!rules.length ? (
           <p className="text-sm text-muted">Loading pricing…</p>
-        )}
+        ) : null}
       </form>
-    </div>
+    </>
   );
 }

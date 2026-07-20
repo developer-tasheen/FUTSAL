@@ -10,6 +10,7 @@ const links = [
   { href: "/", label: "Home" },
   { href: "/tournaments", label: "Tournaments" },
   { href: "/contact", label: "Contact" },
+  { href: "/login", label: "Login" },
 ];
 
 export function MainNav() {
@@ -20,17 +21,30 @@ export function MainNav() {
     return href === "/" ? pathname === "/" : pathname.startsWith(href);
   }
 
+  // Inside the admin dashboard the sidebar handles navigation, so keep the
+  // header minimal: no public links, just the theme toggle.
+  if (pathname.startsWith("/admin")) {
+    return (
+      <div className="flex items-center gap-3">
+        <span className="hidden rounded-full bg-white/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-wide text-white/80 sm:inline-block">
+          Admin dashboard
+        </span>
+        <ThemeToggle />
+      </div>
+    );
+  }
+
   return (
     <>
       {/* Desktop navigation */}
       <div className="hidden items-center gap-3 md:flex">
-        <div className="flex items-center gap-1 rounded-full border border-border bg-subtle/70 p-1">
+        <div className="flex items-center gap-1">
           {links.map((link) => (
             <Link
               className={`rounded-full px-4 py-2 text-sm font-semibold transition ${
                 isActive(link.href)
-                  ? "bg-accent text-white shadow-md shadow-accent/25"
-                  : "text-muted hover:bg-surface hover:text-foreground"
+                  ? "bg-white text-black shadow-md shadow-black/20"
+                  : "text-white/75 hover:bg-white/10 hover:text-white"
               }`}
               href={link.href}
               key={link.href}
@@ -39,23 +53,7 @@ export function MainNav() {
             </Link>
           ))}
         </div>
-        <Link
-          className={`rounded-full px-4 py-2 text-sm font-semibold transition ${
-            isActive("/login") || isActive("/dashboard")
-              ? "text-accent"
-              : "text-muted hover:text-foreground"
-          }`}
-          href="/login"
-        >
-          Login
-        </Link>
         <ThemeToggle />
-        <Link
-          className="button button-primary min-h-0 rounded-full px-5 py-2.5 text-sm shadow-lg shadow-accent/25"
-          href="/book"
-        >
-          BOOK NOW
-        </Link>
       </div>
 
       {/* Mobile controls */}
@@ -64,7 +62,7 @@ export function MainNav() {
         <button
           aria-expanded={menuOpen}
           aria-label={menuOpen ? "Close menu" : "Open menu"}
-          className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-border bg-surface"
+          className="inline-flex h-10 w-10 items-center justify-center rounded-lg text-white transition hover:bg-white/10"
           onClick={() => setMenuOpen((open) => !open)}
           type="button"
         >
@@ -74,14 +72,14 @@ export function MainNav() {
 
       {/* Mobile menu panel */}
       {menuOpen ? (
-        <div className="w-full basis-full border-t border-border pt-3 md:hidden">
+        <div className="w-full basis-full border-t border-white/10 pt-3 md:hidden">
           <div className="flex flex-col gap-1 pb-3">
             {links.map((link) => (
               <Link
                 className={`rounded-xl px-4 py-3 text-sm font-semibold transition ${
                   isActive(link.href)
-                    ? "bg-accent/10 text-accent"
-                    : "hover:bg-subtle"
+                    ? "bg-white text-black"
+                    : "text-white/85 hover:bg-white/10 hover:text-white"
                 }`}
                 href={link.href}
                 key={link.href}
@@ -90,22 +88,6 @@ export function MainNav() {
                 {link.label}
               </Link>
             ))}
-            <Link
-              className={`rounded-xl px-4 py-3 text-sm font-semibold transition ${
-                isActive("/login") ? "bg-accent/10 text-accent" : "hover:bg-subtle"
-              }`}
-              href="/login"
-              onClick={() => setMenuOpen(false)}
-            >
-              Login
-            </Link>
-            <Link
-              className="button button-primary mt-2 w-full rounded-xl"
-              href="/book"
-              onClick={() => setMenuOpen(false)}
-            >
-              BOOK NOW
-            </Link>
           </div>
         </div>
       ) : null}

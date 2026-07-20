@@ -4,11 +4,19 @@ import {
   CalendarOff,
   ClipboardList,
   FileText,
+  LayoutDashboard,
   Tag,
 } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { ErrorNote, StatusBadge } from "./ui";
+import {
+  ErrorNote,
+  Pagination,
+  PageHeader,
+  SectionCard,
+  StatusBadge,
+  usePagination,
+} from "./ui";
 
 type Booking = {
   id: string;
@@ -60,6 +68,7 @@ export function AdminClient() {
   const [analytics, setAnalytics] = useState<Analytics | null>(null);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
+  const { page, pageItems, setPage, totalPages } = usePagination(bookings, 5);
 
   useEffect(() => {
     async function load() {
@@ -105,88 +114,94 @@ export function AdminClient() {
   ];
 
   return (
-    <div>
-      <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">
-        Venue dashboard
-      </h1>
+    <>
+      <PageHeader
+        description="Quick view of bookings, revenue, and common admin tasks."
+        icon={LayoutDashboard}
+        title="Overview"
+      />
       <ErrorNote message={error} />
 
-      <div className="mt-6 grid grid-cols-2 gap-4 lg:grid-cols-4">
+      <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
         {stats.map((stat) => (
           <div
-            className="rounded-2xl border border-border bg-surface p-5"
+            className="rounded-2xl border border-border bg-surface p-4 sm:p-5"
             key={stat.label}
           >
-            <p className="text-sm text-muted">{stat.label}</p>
-            <p className="mt-2 text-xl font-bold sm:text-2xl">{stat.value}</p>
+            <p className="text-xs text-muted sm:text-sm">{stat.label}</p>
+            <p className="mt-2 text-lg font-bold sm:text-2xl">{stat.value}</p>
           </div>
         ))}
       </div>
 
-      <div className="mt-8 grid gap-4 sm:grid-cols-2">
-        {quickLinks.map((link) => (
-          <Link
-            className="group flex items-start gap-4 rounded-2xl border border-border bg-surface p-5 transition hover:border-accent"
-            href={link.href}
-            key={link.href}
-          >
-            <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-accent/10 text-accent">
-              <link.icon size={20} />
-            </span>
-            <span>
-              <span className="block font-semibold group-hover:text-accent">
-                {link.label}
+      <SectionCard description="Jump to common tasks" title="Quick actions">
+        <div className="grid gap-3 sm:grid-cols-2">
+          {quickLinks.map((link) => (
+            <Link
+              className="group flex items-start gap-3 rounded-xl border border-border bg-background p-4 transition hover:border-accent"
+              href={link.href}
+              key={link.href}
+            >
+              <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-accent/10 text-accent">
+                <link.icon size={18} />
               </span>
-              <span className="mt-0.5 block text-sm text-muted">
-                {link.description}
+              <span>
+                <span className="block text-sm font-semibold group-hover:text-accent">
+                  {link.label}
+                </span>
+                <span className="mt-0.5 block text-xs text-muted">
+                  {link.description}
+                </span>
               </span>
-            </span>
-          </Link>
-        ))}
-      </div>
+            </Link>
+          ))}
+        </div>
+      </SectionCard>
 
-      <section className="mt-10">
-        <div className="flex items-center justify-between">
-          <h2 className="text-lg font-semibold">Latest bookings</h2>
+      <SectionCard
+        actions={
           <Link
             className="text-sm font-semibold text-accent hover:underline"
             href="/admin/bookings"
           >
-            View all →
+            View all
           </Link>
-        </div>
-        <div className="mt-4 overflow-x-auto rounded-2xl border border-border">
+        }
+        flush
+        title="Latest bookings"
+      >
+        <div className="overflow-x-auto">
           <table className="w-full min-w-[640px] text-left text-sm">
-            <thead className="bg-subtle text-muted">
+            <thead className="bg-subtle/40 text-muted">
               <tr>
-                <th className="px-4 py-3 font-semibold">Reference</th>
-                <th className="px-4 py-3 font-semibold">Customer</th>
-                <th className="px-4 py-3 font-semibold">Date</th>
-                <th className="px-4 py-3 font-semibold">Time</th>
-                <th className="px-4 py-3 font-semibold">Amount</th>
-                <th className="px-4 py-3 font-semibold">Status</th>
+                <th className="px-5 py-3 font-semibold">Reference</th>
+                <th className="px-5 py-3 font-semibold">Customer</th>
+                <th className="px-5 py-3 font-semibold">Date</th>
+                <th className="px-5 py-3 font-semibold">Time</th>
+                <th className="px-5 py-3 font-semibold">Amount</th>
+                <th className="px-5 py-3 font-semibold">Status</th>
               </tr>
             </thead>
             <tbody>
-              {bookings.map((booking) => (
+              {pageItems.map((booking) => (
                 <tr className="border-t border-border" key={booking.id}>
-                  <td className="px-4 py-3 font-medium">{booking.reference}</td>
-                  <td className="px-4 py-3">{booking.customerName}</td>
-                  <td className="px-4 py-3">{booking.bookingDate}</td>
-                  <td className="whitespace-nowrap px-4 py-3">
+                  <td className="px-5 py-3 font-medium">{booking.reference}</td>
+                  <td className="px-5 py-3">{booking.customerName}</td>
+                  <td className="px-5 py-3">{booking.bookingDate}</td>
+                  <td className="whitespace-nowrap px-5 py-3">
                     {booking.timeLabel}
                   </td>
-                  <td className="px-4 py-3">
+                  <td className="px-5 py-3">
                     FJD ${booking.amountFjd.toFixed(2)}
                   </td>
-                  <td className="px-4 py-3">
+                  <td className="px-5 py-3">
                     <StatusBadge status={booking.status} />
                   </td>
                 </tr>
               ))}
               {!loading && bookings.length === 0 ? (
                 <tr>
-                  <td className="px-4 py-6 text-muted" colSpan={6}>
+                  <td className="px-5 py-8 text-center text-muted" colSpan={6}>
                     No bookings yet.
                   </td>
                 </tr>
@@ -194,7 +209,14 @@ export function AdminClient() {
             </tbody>
           </table>
         </div>
-      </section>
-    </div>
+        <Pagination
+          onPageChange={setPage}
+          page={page}
+          pageSize={5}
+          totalItems={bookings.length}
+          totalPages={totalPages}
+        />
+      </SectionCard>
+    </>
   );
 }

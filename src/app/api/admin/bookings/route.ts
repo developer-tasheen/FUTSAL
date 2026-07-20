@@ -48,6 +48,8 @@ export async function GET(request: Request) {
         reference: bookings.reference,
         customerName: bookings.customerName,
         customerMobile: bookings.customerMobile,
+        customerEmail: bookings.customerEmail,
+        courtId: bookings.courtId,
         courtName: courts.name,
         bookingDate: bookings.bookingDate,
         startTime: bookings.startTime,

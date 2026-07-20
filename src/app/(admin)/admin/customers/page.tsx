@@ -1,7 +1,15 @@
 "use client";
 
+import { Users } from "lucide-react";
 import { useEffect, useState } from "react";
-import { ErrorNote, PageTitle } from "../ui";
+import {
+  CountBadge,
+  ErrorNote,
+  Pagination,
+  PageHeader,
+  SectionCard,
+  usePagination,
+} from "../ui";
 
 type Customer = {
   id: string;
@@ -16,6 +24,7 @@ export default function AdminCustomersPage() {
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
+  const { page, pageItems, setPage, totalPages } = usePagination(customers);
 
   useEffect(() => {
     async function load() {
@@ -40,48 +49,61 @@ export default function AdminCustomersPage() {
   }, []);
 
   return (
-    <div>
-      <PageTitle
+    <>
+      <PageHeader
         description="Registered customer accounts and their booking activity."
+        icon={Users}
         title="Customers"
       />
       <ErrorNote message={error} />
 
-      <div className="mt-6 overflow-x-auto rounded-2xl border border-border">
-        <table className="w-full min-w-[640px] text-left text-sm">
-          <thead className="bg-subtle text-muted">
-            <tr>
-              <th className="px-4 py-3 font-semibold">Name</th>
-              <th className="px-4 py-3 font-semibold">Mobile</th>
-              <th className="px-4 py-3 font-semibold">Email</th>
-              <th className="px-4 py-3 font-semibold">Bookings</th>
-              <th className="px-4 py-3 font-semibold">Joined</th>
-            </tr>
-          </thead>
-          <tbody>
-            {customers.map((customer) => (
-              <tr className="border-t border-border" key={customer.id}>
-                <td className="px-4 py-3 font-medium">{customer.name}</td>
-                <td className="px-4 py-3">{customer.mobileNumber}</td>
-                <td className="px-4 py-3 text-muted">
-                  {customer.email ?? "—"}
-                </td>
-                <td className="px-4 py-3">{customer.bookingsCount}</td>
-                <td className="px-4 py-3 text-muted">
-                  {new Date(customer.createdAt).toLocaleDateString()}
-                </td>
-              </tr>
-            ))}
-            {!loading && customers.length === 0 ? (
+      <SectionCard
+        actions={<CountBadge count={customers.length} label="customers" />}
+        flush
+        title="Registered customers"
+      >
+        <div className="overflow-x-auto">
+          <table className="w-full min-w-[640px] text-left text-sm">
+            <thead className="bg-subtle/40 text-muted">
               <tr>
-                <td className="px-4 py-6 text-muted" colSpan={5}>
-                  No registered customers yet.
-                </td>
+                <th className="px-5 py-3 font-semibold">Name</th>
+                <th className="px-5 py-3 font-semibold">Mobile</th>
+                <th className="px-5 py-3 font-semibold">Email</th>
+                <th className="px-5 py-3 font-semibold">Bookings</th>
+                <th className="px-5 py-3 font-semibold">Joined</th>
               </tr>
-            ) : null}
-          </tbody>
-        </table>
-      </div>
-    </div>
+            </thead>
+            <tbody>
+              {pageItems.map((customer) => (
+                <tr className="border-t border-border" key={customer.id}>
+                  <td className="px-5 py-3 font-medium">{customer.name}</td>
+                  <td className="px-5 py-3">{customer.mobileNumber}</td>
+                  <td className="px-5 py-3 text-muted">
+                    {customer.email ?? "—"}
+                  </td>
+                  <td className="px-5 py-3">{customer.bookingsCount}</td>
+                  <td className="px-5 py-3 text-muted">
+                    {new Date(customer.createdAt).toLocaleDateString()}
+                  </td>
+                </tr>
+              ))}
+              {!loading && customers.length === 0 ? (
+                <tr>
+                  <td className="px-5 py-8 text-center text-muted" colSpan={5}>
+                    No registered customers yet.
+                  </td>
+                </tr>
+              ) : null}
+            </tbody>
+          </table>
+        </div>
+        <Pagination
+          onPageChange={setPage}
+          page={page}
+          totalItems={customers.length}
+          totalPages={totalPages}
+        />
+      </SectionCard>
+    </>
   );
 }
