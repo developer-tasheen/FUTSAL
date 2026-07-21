@@ -12,7 +12,7 @@ export function SiteHeader() {
       >
         <div className="flex min-h-12 min-w-0 items-center justify-between gap-3">
           <Link
-            className="group flex shrink-0 items-center gap-2 sm:gap-3"
+            className="group flex min-w-0 flex-1 items-center gap-2.5 sm:flex-none sm:gap-3"
             href="/"
           >
             <Image
@@ -23,6 +23,14 @@ export function SiteHeader() {
               src="/logo.png"
               width={46}
             />
+            <span className="min-w-0 sm:hidden">
+              <span className="block truncate text-sm font-bold leading-tight">
+                Naikabula <span className="text-accent">Futsal</span>
+              </span>
+              <span className="block text-[11px] font-semibold uppercase tracking-[0.12em] text-white/70">
+                Court
+              </span>
+            </span>
             <span className="hidden text-base font-bold tracking-tight sm:inline sm:text-lg">
               Naikabula <span className="text-accent">Futsal</span> Court
             </span>
