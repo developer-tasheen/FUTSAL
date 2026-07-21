@@ -21,11 +21,9 @@ export function MainNav() {
     return href === "/" ? pathname === "/" : pathname.startsWith(href);
   }
 
-  // Inside the admin dashboard the sidebar handles navigation, so keep the
-  // header minimal: no public links, just the theme toggle.
   if (pathname.startsWith("/admin")) {
     return (
-      <div className="flex items-center gap-3">
+      <div className="flex shrink-0 items-center gap-3">
         <span className="hidden rounded-full bg-white/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-wide text-white/80 sm:inline-block">
           Admin dashboard
         </span>
@@ -35,8 +33,7 @@ export function MainNav() {
   }
 
   return (
-    <>
-      {/* Desktop navigation */}
+    <div className="relative shrink-0">
       <div className="hidden items-center gap-3 md:flex">
         <div className="flex items-center gap-1">
           {links.map((link) => (
@@ -56,8 +53,7 @@ export function MainNav() {
         <ThemeToggle />
       </div>
 
-      {/* Mobile controls */}
-      <div className="flex items-center gap-2 md:hidden">
+      <div className="flex items-center justify-end gap-2 md:hidden">
         <ThemeToggle />
         <button
           aria-expanded={menuOpen}
@@ -70,10 +66,9 @@ export function MainNav() {
         </button>
       </div>
 
-      {/* Mobile menu panel */}
       {menuOpen ? (
-        <div className="w-full basis-full border-t border-white/10 pt-3 md:hidden">
-          <div className="flex flex-col gap-1 pb-3">
+        <div className="absolute right-0 top-[calc(100%+0.5rem)] z-50 w-[min(calc(100vw-2rem),18rem)] overflow-hidden rounded-2xl border border-white/10 bg-black shadow-xl md:hidden">
+          <div className="flex flex-col gap-1 p-2">
             {links.map((link) => (
               <Link
                 className={`rounded-xl px-4 py-3 text-sm font-semibold transition ${
@@ -91,6 +86,6 @@ export function MainNav() {
           </div>
         </div>
       ) : null}
-    </>
+    </div>
   );
 }

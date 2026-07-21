@@ -7,7 +7,7 @@ export const metadata: Metadata = {
 
 export default function BookingPage() {
   return (
-    <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-10 sm:px-6 sm:py-14 lg:px-8">
+    <main className="mx-auto w-full min-w-0 max-w-6xl flex-1 overflow-x-hidden px-4 py-8 sm:px-6 sm:py-14 lg:px-8">
       <p className="text-sm font-semibold uppercase tracking-[0.18em] text-accent">
         Booking
       </p>

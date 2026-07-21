@@ -70,7 +70,7 @@ function StepHeading({
         {step}
       </span>
       <div>
-        <h2 className="text-lg font-semibold leading-7">{title}</h2>
+        <h2 className="min-w-0 text-base font-semibold leading-7 sm:text-lg">{title}</h2>
         {hint ? <p className="mt-0.5 text-sm text-muted">{hint}</p> : null}
       </div>
     </div>
@@ -208,20 +208,21 @@ export function BookingForm() {
   }
 
   return (
-    <div className="grid gap-8 lg:grid-cols-[1fr_360px]">
-      <div className="space-y-5">
-        <section className="rounded-2xl border border-border bg-surface p-5 sm:p-6">
+    <div className="grid min-w-0 w-full gap-6 lg:grid-cols-[minmax(0,1fr)_340px] lg:gap-8">
+      <div className="min-w-0 space-y-4 sm:space-y-5">
+        <section className="min-w-0 rounded-2xl border border-border bg-surface p-4 sm:p-6">
           <StepHeading
             hint="Bookings open up to 7 days in advance."
             step={1}
             title="Pick a day"
           />
-          <div className="mt-5 flex gap-2 overflow-x-auto pb-1 sm:grid sm:grid-cols-7 sm:gap-2.5 sm:overflow-visible sm:pb-0">
-            {bookingDays.map((day) => {
-              const isSelected = date === day.iso;
-              return (
-                <button
-                  className={`flex w-[72px] shrink-0 flex-col items-center rounded-xl border py-3 text-center transition sm:w-auto ${
+          <div className="mt-4 max-w-full overflow-x-auto overscroll-x-contain pb-1 sm:mt-5 sm:overflow-visible sm:pb-0">
+            <div className="flex w-max gap-2 sm:grid sm:w-full sm:grid-cols-7 sm:gap-2.5">
+              {bookingDays.map((day) => {
+                const isSelected = date === day.iso;
+                return (
+                  <button
+                    className={`flex w-[4.25rem] shrink-0 flex-col items-center rounded-xl border py-2.5 text-center transition sm:w-auto sm:py-3 ${
                     isSelected
                       ? "border-accent bg-accent text-white shadow-lg shadow-accent/25"
                       : "border-border bg-background hover:border-accent"
@@ -248,12 +249,13 @@ export function BookingForm() {
                     {day.month}
                   </span>
                 </button>
-              );
-            })}
+                );
+              })}
+            </div>
           </div>
         </section>
 
-        <section className="rounded-2xl border border-border bg-surface p-5 sm:p-6">
+        <section className="min-w-0 rounded-2xl border border-border bg-surface p-4 sm:p-6">
           <StepHeading step={2} title="Pick a court" />
           <div className="mt-5 flex flex-wrap gap-3">
             {courts.map((court) => (
@@ -274,7 +276,7 @@ export function BookingForm() {
           </div>
         </section>
 
-        <section className="rounded-2xl border border-border bg-surface p-5 sm:p-6">
+        <section className="min-w-0 rounded-2xl border border-border bg-surface p-4 sm:p-6">
           <StepHeading
             hint="Prices are per one-hour slot. Booked or past slots are greyed out."
             step={3}
@@ -290,7 +292,7 @@ export function BookingForm() {
                 const isSelected = selectedSlot?.startTime === slot.startTime;
                 return (
                   <button
-                    className={`rounded-xl border p-4 text-left transition ${
+                    className={`rounded-xl border p-3 text-left transition sm:p-4 ${
                       !available
                         ? "cursor-not-allowed border-border bg-subtle opacity-50"
                         : isSelected
@@ -328,7 +330,7 @@ export function BookingForm() {
           )}
         </section>
 
-        <section className="rounded-2xl border border-border bg-surface p-5 sm:p-6">
+        <section className="min-w-0 rounded-2xl border border-border bg-surface p-4 sm:p-6">
           <StepHeading
             hint={
               account
@@ -427,12 +429,12 @@ export function BookingForm() {
         </section>
       </div>
 
-      <aside className="h-fit overflow-hidden rounded-2xl border border-border bg-surface lg:sticky lg:top-24">
-        <div className="border-b border-border bg-subtle px-6 py-4">
-          <h2 className="text-lg font-semibold">Booking summary</h2>
+      <aside className="h-fit min-w-0 overflow-hidden rounded-2xl border border-border bg-surface lg:sticky lg:top-24">
+        <div className="border-b border-border bg-subtle px-4 py-3.5 sm:px-6 sm:py-4">
+          <h2 className="text-base font-semibold sm:text-lg">Booking summary</h2>
         </div>
 
-        <div className="p-6">
+        <div className="p-4 sm:p-6">
           <dl className="space-y-4 text-sm">
             <div className="flex items-center justify-between gap-4">
               <dt className="flex items-center gap-2.5 text-muted">

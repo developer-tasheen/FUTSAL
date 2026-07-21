@@ -15,9 +15,12 @@ const contact = {
   location: "Naikabula, Lautoka, Fiji",
 };
 
+const directionsUrl = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(contact.location)}`;
+const mapsSearchUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(contact.location)}`;
+
 const mapEmbedUrl = `https://www.google.com/maps?q=${encodeURIComponent(
   contact.location,
-)}&output=embed`;
+)}&output=embed&z=15`;
 
 const details = [
   {
@@ -36,7 +39,7 @@ const details = [
     icon: MapPin,
     label: "Location",
     value: contact.location,
-    href: `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(contact.location)}`,
+    href: directionsUrl,
   },
   {
     icon: Clock,
@@ -48,7 +51,7 @@ const details = [
 
 export default function ContactPage() {
   return (
-    <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-12 sm:px-6 sm:py-16 lg:px-8">
+    <main className="mx-auto w-full min-w-0 max-w-6xl flex-1 overflow-x-hidden px-4 py-12 sm:px-6 sm:py-16 lg:px-8">
       <Reveal>
         <p className="text-sm font-semibold uppercase tracking-[0.2em] text-accent">
           Contact us
@@ -132,19 +135,49 @@ export default function ContactPage() {
         </Reveal>
       </div>
 
-      {/* Map */}
-      <Reveal className="mt-12">
-        <div className="overflow-hidden rounded-2xl border border-border">
+      {/* Map — always visible (no scroll reveal) so mobile users see navigation */}
+      <section className="mt-12">
+        <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <h2 className="text-xl font-bold tracking-tight sm:text-2xl">
+              Find us on the map
+            </h2>
+            <p className="mt-1 text-sm text-muted">{contact.location}</p>
+          </div>
+          <a
+            className="button button-primary w-full shrink-0 sm:w-auto"
+            href={directionsUrl}
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            Get directions
+          </a>
+        </div>
+
+        <div className="overflow-hidden rounded-2xl border border-border bg-subtle">
           <iframe
             allowFullScreen
-            className="h-[380px] w-full"
+            className="block min-h-[280px] w-full border-0 sm:min-h-[380px]"
+            height="380"
             loading="lazy"
             referrerPolicy="no-referrer-when-downgrade"
             src={mapEmbedUrl}
             title="Naikabula Futsal Court location map"
           />
         </div>
-      </Reveal>
+
+        <p className="mt-3 text-center text-sm text-muted sm:hidden">
+          Map not loading?{" "}
+          <a
+            className="font-semibold text-accent hover:underline"
+            href={mapsSearchUrl}
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            Open in Google Maps
+          </a>
+        </p>
+      </section>
     </main>
   );
 }
