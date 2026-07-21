@@ -227,56 +227,59 @@ export default async function Home() {
             </div>
           </Reveal>
 
-          <div className="mx-auto mt-12 grid max-w-3xl gap-6 sm:grid-cols-2">
+          <div className="mx-auto mt-10 grid max-w-3xl gap-5 sm:mt-12 sm:grid-cols-2 sm:gap-6">
             {pricing.map((tier, index) => (
               <Reveal delay={index * 0.15} key={tier.label}>
-              <div
-                className={`relative h-full rounded-2xl border p-8 transition duration-300 hover:-translate-y-1.5 ${
-                  tier.highlighted
-                    ? "border-accent bg-foreground text-background shadow-xl shadow-accent/10 hover:shadow-2xl hover:shadow-accent/20 dark:bg-surface dark:text-foreground"
-                    : "border-border bg-surface hover:border-accent hover:shadow-xl hover:shadow-accent/10"
-                }`}
-              >
-                {tier.highlighted ? (
-                  <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-accent px-4 py-1 text-xs font-bold uppercase tracking-wide text-white">
-                    Prime time
-                  </span>
-                ) : null}
-                <p className="text-sm font-semibold uppercase tracking-wide text-accent">
-                  {tier.label}
-                </p>
-                <p
-                  className={`mt-1 text-sm ${tier.highlighted ? "opacity-70" : "text-muted"}`}
-                >
-                  {tier.slot}
-                </p>
-                <p className="mt-5 flex items-baseline gap-1">
-                  <span className="text-5xl font-extrabold tracking-tight">
-                    {tier.price}
-                  </span>
-                  <span
-                    className={`text-sm font-medium ${tier.highlighted ? "opacity-70" : "text-muted"}`}
-                  >
-                    FJD / hour
-                  </span>
-                </p>
-                <ul className="mt-6 space-y-3 text-sm">
-                  {tier.features.map((feature) => (
-                    <li className="flex items-center gap-2" key={feature}>
-                      <Check className="shrink-0 text-accent" size={16} />
-                      {feature}
-                    </li>
-                  ))}
-                </ul>
-                <Link
-                  className={`button mt-8 w-full ${
-                    tier.highlighted ? "button-primary" : "button-secondary"
+                <div
+                  className={`relative flex h-full flex-col rounded-2xl border p-6 text-center transition duration-300 hover:-translate-y-1.5 sm:p-8 sm:text-left ${
+                    tier.highlighted
+                      ? "border-accent bg-foreground text-background shadow-xl shadow-accent/10 hover:shadow-2xl hover:shadow-accent/20 dark:bg-surface dark:text-foreground"
+                      : "border-border bg-surface hover:border-accent hover:shadow-xl hover:shadow-accent/10"
                   }`}
-                  href="/book"
                 >
-                  Book this slot
-                </Link>
-              </div>
+                  {tier.highlighted ? (
+                    <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-accent px-4 py-1 text-xs font-bold uppercase tracking-wide text-white">
+                      Prime time
+                    </span>
+                  ) : null}
+                  <p className="text-sm font-semibold uppercase tracking-wide text-accent">
+                    {tier.label}
+                  </p>
+                  <p
+                    className={`mt-1 text-sm ${tier.highlighted ? "opacity-70" : "text-muted"}`}
+                  >
+                    {tier.slot}
+                  </p>
+                  <div className="mt-5 flex flex-col items-center gap-1 sm:flex-row sm:items-baseline sm:gap-2">
+                    <span className="text-4xl font-extrabold tracking-tight sm:text-5xl">
+                      {tier.price}
+                    </span>
+                    <span
+                      className={`text-sm font-medium ${tier.highlighted ? "opacity-70" : "text-muted"}`}
+                    >
+                      FJD / hour
+                    </span>
+                  </div>
+                  <ul className="mt-6 space-y-3 text-sm">
+                    {tier.features.map((feature) => (
+                      <li
+                        className="flex items-center justify-center gap-2 sm:justify-start"
+                        key={feature}
+                      >
+                        <Check className="shrink-0 text-accent" size={16} />
+                        {feature}
+                      </li>
+                    ))}
+                  </ul>
+                  <Link
+                    className={`button mt-auto pt-8 w-full ${
+                      tier.highlighted ? "button-primary" : "button-secondary"
+                    }`}
+                    href="/book"
+                  >
+                    Book this slot
+                  </Link>
+                </div>
               </Reveal>
             ))}
           </div>

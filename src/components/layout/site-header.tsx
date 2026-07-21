@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { MainNav } from "./main-nav";
+import { MobileNavTabs } from "./mobile-nav-tabs";
 
 export function SiteHeader() {
   return (
@@ -14,25 +15,26 @@ export function SiteHeader() {
             className="group flex min-w-0 flex-1 items-center gap-2 text-sm font-bold tracking-tight sm:gap-3 sm:text-lg"
             href="/"
           >
-          <Image
-            alt="Naikabula Futsal Court logo"
-            className="h-10 w-auto shrink-0 transition-transform duration-300 group-hover:scale-110 sm:h-12"
-            height={48}
-            priority
-            src="/logo.png"
-            width={46}
-          />
-          <span className="truncate sm:whitespace-normal">
-            <span className="sm:hidden">
-              Naikabula <span className="text-accent">Futsal</span>
+            <Image
+              alt="Naikabula Futsal Court logo"
+              className="h-10 w-auto shrink-0 transition-transform duration-300 group-hover:scale-110 sm:h-12"
+              height={48}
+              priority
+              src="/logo.png"
+              width={46}
+            />
+            <span className="truncate sm:whitespace-normal">
+              <span className="sm:hidden">
+                Naikabula <span className="text-accent">Futsal</span>
+              </span>
+              <span className="hidden sm:inline">
+                Naikabula <span className="text-accent">Futsal</span> Court
+              </span>
             </span>
-            <span className="hidden sm:inline">
-              Naikabula <span className="text-accent">Futsal</span> Court
-            </span>
-          </span>
           </Link>
           <MainNav />
         </div>
+        <MobileNavTabs />
       </nav>
     </header>
   );
