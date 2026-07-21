@@ -7,7 +7,6 @@ const tabs = [
   { href: "/", label: "Home" },
   { href: "/tournaments", label: "Tournaments" },
   { href: "/contact", label: "Contact" },
-  { href: "/book", label: "Book" },
 ];
 
 export function MobileNavTabs() {

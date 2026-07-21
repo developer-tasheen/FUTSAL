@@ -1,6 +1,6 @@
 "use client";
 
-import { LogIn, Menu, UserRound, X } from "lucide-react";
+import { LogIn, UserRound } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -19,7 +19,6 @@ type SessionUser = {
 
 export function MainNav() {
   const pathname = usePathname();
-  const [menuOpen, setMenuOpen] = useState(false);
   const [user, setUser] = useState<SessionUser | null>(null);
 
   useEffect(() => {
@@ -55,7 +54,7 @@ export function MainNav() {
   }
 
   return (
-    <div className="relative flex shrink-0 items-center gap-2 sm:gap-3">
+    <div className="flex shrink-0 items-center gap-2 sm:gap-3">
       <div className="hidden items-center gap-3 md:flex">
         <div className="flex items-center gap-1">
           {links.map((link) => (
@@ -111,46 +110,7 @@ export function MainNav() {
           </Link>
         )}
         <ThemeToggle />
-        <button
-          aria-expanded={menuOpen}
-          aria-label={menuOpen ? "Close menu" : "Open menu"}
-          className="inline-flex h-10 w-10 items-center justify-center rounded-lg text-white transition hover:bg-white/10"
-          onClick={() => setMenuOpen((open) => !open)}
-          type="button"
-        >
-          {menuOpen ? <X size={20} /> : <Menu size={20} />}
-        </button>
       </div>
-
-      {menuOpen ? (
-        <div className="absolute right-0 top-[calc(100%+0.5rem)] z-50 w-[min(calc(100vw-2rem),18rem)] overflow-hidden rounded-2xl border border-white/10 bg-black shadow-xl md:hidden">
-          <div className="flex flex-col gap-1 p-2">
-            {links.map((link) => (
-              <Link
-                className={`rounded-xl px-4 py-3 text-sm font-semibold transition ${
-                  isActive(link.href)
-                    ? "bg-white text-black"
-                    : "text-white/85 hover:bg-white/10 hover:text-white"
-                }`}
-                href={link.href}
-                key={link.href}
-                onClick={() => setMenuOpen(false)}
-              >
-                {link.label}
-              </Link>
-            ))}
-            {!user ? (
-              <Link
-                className="mt-1 rounded-xl border border-white/15 px-4 py-3 text-center text-sm font-semibold text-white/90"
-                href="/register"
-                onClick={() => setMenuOpen(false)}
-              >
-                Create account
-              </Link>
-            ) : null}
-          </div>
-        </div>
-      ) : null}
     </div>
   );
 }

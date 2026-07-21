@@ -227,59 +227,80 @@ export default async function Home() {
             </div>
           </Reveal>
 
-          <div className="mx-auto mt-10 grid max-w-3xl gap-5 sm:mt-12 sm:grid-cols-2 sm:gap-6">
+          <div className="mx-auto mt-10 grid max-w-4xl gap-5 sm:mt-12 sm:grid-cols-2 sm:gap-6">
             {pricing.map((tier, index) => (
               <Reveal delay={index * 0.15} key={tier.label}>
-                <div
-                  className={`relative flex h-full flex-col rounded-2xl border p-6 text-center transition duration-300 hover:-translate-y-1.5 sm:p-8 sm:text-left ${
+                <article
+                  className={`flex h-full flex-col overflow-hidden rounded-2xl border bg-surface shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-lg ${
                     tier.highlighted
-                      ? "border-accent bg-foreground text-background shadow-xl shadow-accent/10 hover:shadow-2xl hover:shadow-accent/20 dark:bg-surface dark:text-foreground"
-                      : "border-border bg-surface hover:border-accent hover:shadow-xl hover:shadow-accent/10"
+                      ? "border-accent ring-1 ring-accent/30"
+                      : "border-border hover:border-accent/40"
                   }`}
                 >
-                  {tier.highlighted ? (
-                    <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-accent px-4 py-1 text-xs font-bold uppercase tracking-wide text-white">
-                      Prime time
-                    </span>
-                  ) : null}
-                  <p className="text-sm font-semibold uppercase tracking-wide text-accent">
-                    {tier.label}
-                  </p>
-                  <p
-                    className={`mt-1 text-sm ${tier.highlighted ? "opacity-70" : "text-muted"}`}
+                  <div
+                    className={`border-b px-5 py-4 ${
+                      tier.highlighted
+                        ? "border-accent/20 bg-accent/10"
+                        : "border-border bg-subtle/80"
+                    }`}
                   >
-                    {tier.slot}
-                  </p>
-                  <div className="mt-5 flex flex-col items-center gap-1 sm:flex-row sm:items-baseline sm:gap-2">
-                    <span className="text-4xl font-extrabold tracking-tight sm:text-5xl">
-                      {tier.price}
-                    </span>
-                    <span
-                      className={`text-sm font-medium ${tier.highlighted ? "opacity-70" : "text-muted"}`}
-                    >
-                      FJD / hour
-                    </span>
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="min-w-0">
+                        <p className="text-xs font-semibold uppercase tracking-[0.14em] text-accent">
+                          {tier.label}
+                        </p>
+                        <p className="mt-1 flex items-center gap-2 text-sm font-semibold">
+                          <Clock
+                            className="shrink-0 text-accent"
+                            size={15}
+                          />
+                          <span>{tier.slot}</span>
+                        </p>
+                      </div>
+                      {tier.highlighted ? (
+                        <span className="shrink-0 rounded-full bg-accent px-3 py-1 text-[10px] font-bold uppercase tracking-wide text-white">
+                          Popular
+                        </span>
+                      ) : null}
+                    </div>
                   </div>
-                  <ul className="mt-6 space-y-3 text-sm">
+
+                  <div className="px-5 py-6">
+                    <p className="text-xs font-semibold uppercase tracking-wide text-muted">
+                      Court hire
+                    </p>
+                    <div className="mt-2 flex items-end gap-2">
+                      <span className="text-4xl font-extrabold leading-none tracking-tight sm:text-[2.75rem]">
+                        {tier.price}
+                      </span>
+                      <span className="pb-1 text-sm font-medium text-muted">
+                        FJD / hour
+                      </span>
+                    </div>
+                  </div>
+
+                  <ul className="flex-1 space-y-2.5 px-5 pb-5 text-sm">
                     {tier.features.map((feature) => (
-                      <li
-                        className="flex items-center justify-center gap-2 sm:justify-start"
-                        key={feature}
-                      >
-                        <Check className="shrink-0 text-accent" size={16} />
-                        {feature}
+                      <li className="flex items-start gap-2.5" key={feature}>
+                        <span className="mt-0.5 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-accent/10">
+                          <Check className="text-accent" size={12} />
+                        </span>
+                        <span>{feature}</span>
                       </li>
                     ))}
                   </ul>
-                  <Link
-                    className={`button mt-auto pt-8 w-full ${
-                      tier.highlighted ? "button-primary" : "button-secondary"
-                    }`}
-                    href="/book"
-                  >
-                    Book this slot
-                  </Link>
-                </div>
+
+                  <div className="border-t border-border bg-subtle/40 p-5">
+                    <Link
+                      className={`button w-full ${
+                        tier.highlighted ? "button-primary" : "button-secondary"
+                      }`}
+                      href="/book"
+                    >
+                      Book this slot
+                    </Link>
+                  </div>
+                </article>
               </Reveal>
             ))}
           </div>
